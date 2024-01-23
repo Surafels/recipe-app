@@ -13,3 +13,7 @@
  *= require_tree .
  *= require_self
  */
+
+.custom-margin-top-6rm{
+    margin-top: 6rem;
+}

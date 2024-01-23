@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'public_recipes/index'
   devise_for :users
   resources :recipe_foods
   resources :recipes
@@ -11,5 +12,5 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "public_recipes#index"
 end
