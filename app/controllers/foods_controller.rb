@@ -3,11 +3,11 @@ class FoodsController < ApplicationController
 
   # GET /foods or /foods.json
   def index
-    if user_signed_in?
-      @foods = current_user.foods
-    else
-      @foods = []
-    end
+    @foods = if user_signed_in?
+               current_user.foods
+             else
+               []
+             end
   end
 
   # GET /foods/1 or /foods/1.json
