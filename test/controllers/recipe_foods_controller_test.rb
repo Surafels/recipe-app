@@ -17,15 +17,15 @@ class RecipeFoodsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create recipe_food' do
     assert_difference('RecipeFood.count') do
-       post foods_url,params: {
-         food: { 
-          measurment_unit: @food.measurment_unit, 
-          name: @food.name, 
+      post foods_url, params: {
+        food: {
+          measurment_unit: @food.measurment_unit,
+          name: @food.name,
           price: @food.price,
-          quantity: @food.quantity, 
+          quantity: @food.quantity,
           user_id: @food.user_id
-           }
-           }
+        }
+      }
     end
 
     assert_redirected_to recipe_food_url(RecipeFood.last)
@@ -42,13 +42,12 @@ class RecipeFoodsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update recipe_food' do
-      patch food_url(@food),params: { 
-      food: { measurment_unit: @food.measurment_unit, 
-      name: @food.name, 
-      price: @food.price,
-      quantity: @food.quantity, 
-      user_id: @food.user_id 
-      } 
+    patch food_url(@food), params: {
+      food: { measurment_unit: @food.measurment_unit,
+              name: @food.name,
+              price: @food.price,
+              quantity: @food.quantity,
+              user_id: @food.user_id }
     }
     assert_redirected_to recipe_food_url(@recipe_food)
   end
