@@ -1,17 +1,9 @@
 class ApplicationController < ActionController::Base
   # before_action :authenticate_user!
-  protect_from_forgery with: :exception
 
-  before_action :update_allowed_parameters, if: :devise_controller?
+  private
 
-  # def after_sign_in_path_for(resource)
-  #     stored_location_for(resource) || users_path
-  #   end
-
-  protected
-
-  def update_allowed_parameters
-    devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:name, :email, :password) }
-    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:name, :email, :password, :current_password) }
+  def redirect_to_public_recipes
+    redirect_to public_recipes_index_path if request.path == root_path
   end
 end
