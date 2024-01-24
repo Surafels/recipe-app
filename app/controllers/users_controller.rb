@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, except: [:show]
+  before_action :set_user, only: %i[show edit update]
+  before_action :authenticate_and_set_user, only: [:destroy]
 
   # GET /users or /users.json
   def index
@@ -51,6 +53,9 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy!
 
+    sign_out(current_user)
+    redirect_to root_path, notice: 'Signed out successfully.'
+
     respond_to do |format|
       format.html { redirect_to users_url, notice: "User was successfully destroyed." }
       format.json { head :no_content }
@@ -62,6 +67,11 @@ class UsersController < ApplicationController
     def set_user
       @user = User.find(params[:id])
     end
+
+  def authenticate_and_set_user
+    authenticate_user!
+    set_user
+  end
 
     # Only allow a list of trusted parameters through.
     def user_params

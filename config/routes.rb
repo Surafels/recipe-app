@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
   get 'public_recipes/index'
   devise_for :users
+  resources :users, except: :show
+  get 'users/:id', to: 'users#show', as: :user_show, constraints: { id: /\d+/ }
   resources :recipe_foods
   resources :recipes
   resources :foods
-  resources :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
