@@ -3,7 +3,11 @@ class FoodsController < ApplicationController
 
   # GET /foods or /foods.json
   def index
-    @foods = Food.all
+    @foods = if user_signed_in?
+               current_user.foods
+             else
+               []
+             end
   end
 
   # GET /foods/1 or /foods/1.json
@@ -21,9 +25,12 @@ class FoodsController < ApplicationController
   def create
     @food = Food.new(food_params)
 
+    # Set the user_id from the current_user
+    @food.user_id = current_user.id if user_signed_in?
+
     respond_to do |format|
       if @food.save
-        format.html { redirect_to food_url(@food), notice: 'Food was successfully created.' }
+        format.html { redirect_to foods_url, notice: 'Food was successfully created.' }
         format.json { render :show, status: :created, location: @food }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -50,7 +57,7 @@ class FoodsController < ApplicationController
     @food.destroy!
 
     respond_to do |format|
-      format.html { redirect_to foods_url, notice: 'Food was successfully destroyed.' }
+      format.html { redirect_to foods_url, notice: 'Food was successfully deleted.' }
       format.json { head :no_content }
     end
   end
