@@ -6,7 +6,7 @@
 
 # Ignore bundler config.
 /.bundle
-
+.idea
 # Ignore all environment files (except templates).
 /.env*
 !/.env*.erb
@@ -33,3 +33,6 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+recipe_app_development
+recipe_app_test
+config/database.yml
