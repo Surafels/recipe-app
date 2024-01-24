@@ -5,13 +5,11 @@ class RecipesController < ApplicationController
   def index
     # @recipes = Recipe.all
     @recipes = current_user.recipes
-
   end
 
   # GET /recipes/1 or /recipes/1.json
   def show
     @recipes = Recipes.find(params[:id])
- 
   end
 
   # GET /recipes/new
@@ -23,20 +21,6 @@ class RecipesController < ApplicationController
   # GET /recipes/1/edit
   def edit; end
 
-  # POST /recipes or /recipes.json
-  # def create
-  #   @recipe = Recipe.new(recipe_params)
-
-  #   respond_to do |format|
-  #     if @recipe.save
-  #       format.html { redirect_to recipe_url(@recipe), notice: 'Recipe was successfully created.' }
-  #       format.json { render :show, status: :created, location: @recipe }
-  #     else
-  #       format.html { render :new, status: :unprocessable_entity }
-  #       format.json { render json: @recipe.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
   def create
     @recipes = current_user.recipes.build(recipe_params)
 
@@ -69,12 +53,6 @@ class RecipesController < ApplicationController
       format.json { head :no_content }
     end
   end
-  # def destroy
-  #   @recipe = Recipe.find(params[:id])
-  #   @recipe.destroy
-
-  #   redirect_to recipes_path, notice: 'Recipe eliminated successfully.'
-  # end
 
   private
 
