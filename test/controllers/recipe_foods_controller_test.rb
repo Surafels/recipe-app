@@ -26,6 +26,7 @@ class RecipeFoodsControllerTest < ActionDispatch::IntegrationTest
           user_id: @food.user_id
         }
       }
+
     end
 
     assert_redirected_to recipe_food_url(RecipeFood.last)
@@ -49,6 +50,7 @@ class RecipeFoodsControllerTest < ActionDispatch::IntegrationTest
               quantity: @food.quantity,
               user_id: @food.user_id }
     }
+
     assert_redirected_to recipe_food_url(@recipe_food)
   end
 
