@@ -20,16 +20,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-  <%= link_to "Home", root_path, class: "nav-link active", "aria-current" => "page" %>
-  <%= link_to "recipes", recipes_path, class: "nav-link" %>
-  <%= link_to "foods", foods_path, class: "nav-link" %>
+            <%= link_to "Home", root_path, class: "nav-link active", "aria-current" => "page" %>
+            <%= link_to "recipes", user_signed_in? ? recipes_path : new_user_session_path, class: "nav-link" %>
+            <%= link_to "foods", user_signed_in? ? foods_path : new_user_session_path, class: "nav-link" %>
 
             <% if user_signed_in? %>
               <li class="nav-item">
                 <%= link_to "Hi, #{current_user.email}", edit_user_registration_path, class: 'nav-link' %>
               </li>
               <li class="nav-item">
-                <%#= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'nav-link' %>
                 <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'nav-link' %>
               </li>
             <% else %>
@@ -40,7 +39,8 @@
                 <%= link_to 'Sign Up', new_user_registration_path, class: 'nav-link' %>
               </li>
             <% end %>
-              </div>
+          </div>
+
         </div>
       </div>
     </nav>
