@@ -1,16 +1,7 @@
-<%= form_with(model: [@recipe, @recipe_food], local: true) do |form| %>
-  <% if recipe_food.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(recipe_food.errors.count, "error") %> prohibited this recipe_food from being saved:</h2>
+<!-- app/views/recipes/add_ingredient.html.erb -->
 
-      <ul>
-        <% recipe_food.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<h3>Add Ingredient</h3>
+<%= form_with(model: @food, url: save_ingredient_recipe_path(@recipe), local: true) do |form| %>
   <div class="mb-3">
     <%= form.label :food_id, class: "fw-bold form-label" %>
     <%= form.collection_select :food_id, @foods, :id, :name, prompt: 'Select a food' %>
@@ -23,9 +14,5 @@
 
   <div>
     <%= form.submit "Add Ingredient", class: 'btn btn-primary' %>
-  </div>
-
-  <div>
-    <%= form.submit %>
   </div>
 <% end %>

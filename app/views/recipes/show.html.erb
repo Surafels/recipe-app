@@ -3,8 +3,43 @@
 <%= render @recipe %>
 
 <div>
-  <%= link_to "Edit this recipe", edit_recipe_path(@recipe) %> |
-  <%= link_to "Back to recipes", recipes_path %>
+  <div class="d-flex justify-content-between">
+    <%= link_to "Generate shopping list", edit_recipe_path(@recipe), class: 'btn btn-primary float-end mb-5' %>
+    <%= link_to "Add ingredients", new_recipe_recipe_food_path(@recipe), class: 'btn btn-primary float-end mb-5' %>
+  </div>
 
-  <%= button_to "Destroy this recipe", @recipe, method: :delete %>
+  <h3>Ingredients</h3>
+  <%= form_with(model: @recipe, local: true) do |form| %>
+    <table class="table container rounded">
+      <thead>
+      <tr>
+        <th scope="col">Food</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Value</th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <% @recipe.recipe_foods.each do |recipeFood| %>
+        <tr>
+          <td><%= recipeFood.food.name %></td>
+          <td><%= recipeFood.quantity %><%= recipeFood.food.measurement_unit  %></td>
+          <td>$<%= recipeFood.quantity * recipeFood.food.price %></td>
+          <td class="d-flex gap-3 justify-content-end">
+            <% if can? :destroy, @recipe %>
+              <%= button_to "Delete", recipe_recipe_food_path(recipe_id: @recipe.id, id: recipeFood.id), method: :delete, class:"btn btn-danger" %>
+              <%= link_to "Modify", edit_recipe_recipe_food_path(recipe_id: @recipe.id, id:recipeFood.id), class:"btn btn-dark" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <%= form.submit "Save Ingredients", class: 'btn btn-primary' %>
+  <% end %>
+
+  <div>
+    <%= link_to 'Back to Recipes', recipes_path, class: 'btn btn-secondary' %>
+  </div>
 </div>

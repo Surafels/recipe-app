@@ -9,23 +9,26 @@ class RecipesController < ApplicationController
 
   # GET /recipes/1 or /recipes/1.json
   def show
-    @recipes = Recipes.find(params[:id])
-  end
+  @recipe = Recipe.find(params[:id])
+  authorize! :read, @recipe
+end
 
   # GET /recipes/new
   def new
     @recipe = Recipe.new
+    @recipe.steps.build # Build an empty step for the form
     @user = current_user
   end
+
 
   # GET /recipes/1/edit
   def edit; end
 
   def create
-    @recipes = current_user.recipes.build(recipe_params)
+    @recipe = current_user.recipes.build(recipe_params)
 
-    if @recipes.save
-      redirect_to recipes_path, notice: 'Food was successfully created.'
+    if @recipe.save
+      redirect_to recipes_path, notice: 'Recipe was successfully created.'
     else
       render :new
     end
@@ -46,12 +49,50 @@ class RecipesController < ApplicationController
 
   # DELETE /recipes/1 or /recipes/1.json
   def destroy
-    @recipe.destroy!
+    @recipe = Recipe.find(params[:id])
+    @recipe.destroy
+    redirect_to recipes_path, notice: 'Recipe eliminated successfully.'
+  end
 
-    respond_to do |format|
-      format.html { redirect_to recipes_url, notice: 'Recipe was successfully destroyed.' }
-      format.json { head :no_content }
+  def add_ingredient
+    @recipe = Recipe.find(params[:id])
+    @food = Food.new
+    @foods = Food.all
+  end
+
+  def save_ingredient
+    @recipe = Recipe.find(params[:id])
+    @food = Food.find(params[:food_id])
+    quantity = params[:quantity].to_i
+
+    if @food && quantity.positive?
+      # Calculate the value based on the unit price and quantity
+      value = @food.price * quantity
+
+      # Create a temporary ingredient hash and store it in the session
+      temp_ingredient = {
+        food_name: @food.name,
+        quantity: quantity,
+        value: value
+      }
+
+      session[:temp_ingredient] ||= []
+      session[:temp_ingredient] << temp_ingredient
+
+      flash[:notice] = 'Ingredient was successfully added.'
+      redirect_to add_ingredient_recipe_path(@recipe)
+    else
+      flash[:alert] = 'Invalid food or quantity.'
+      render :add_ingredient
     end
+  end
+
+
+  def remove_temp_ingredient
+    index = params[:index].to_i
+    session[:temp_ingredient].delete_at(index) if index >= 0
+
+    redirect_to recipe_path(@recipe), notice: 'Ingredient was successfully removed.'
   end
 
   private
@@ -63,6 +104,13 @@ class RecipesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def recipe_params
-    params.require(:recipe).permit(:name, :preparation_time, :cooking_time, :description, :public, :user_id)
+    params.require(:recipe).permit(
+      :name, :preparation_time, :cooking_time, :description, :public, :user_id,
+      recipe_foods_attributes: [:id, :food, :quantity, :value, :_destroy]
+    )
+  end
+
+  def food_params
+    params.require(:food).permit(:name, :price, :measurement_unit)
   end
 end
