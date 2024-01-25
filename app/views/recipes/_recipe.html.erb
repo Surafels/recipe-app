@@ -8,15 +8,15 @@
 
   <div class="toggle_public">
     <% if user_signed_in? && current_user.id == recipe.user_id %>
-      <div class="d-flex justify-content-end form-check form-switch">
-        <%= form_for recipe, url: toggle_public_recipe_path(recipe.id), method: :patch do |form| %>
+      <div class="d-flex justify-content-end form-check form-switch" style="display: flex;">
+        <%= form_for recipe, url: toggle_public_recipe_path(recipe.id), method: :patch, html: { class: 'd-flex flex-row align-items-center' } do |form| %>
           <label class="form-check-label mx-5" for="<%= dom_id(recipe, :public) %>">Public</label>
-          <div class="mx-2"> <!-- Add margin between label and switch -->
-            <%= form.check_box :public, class: "form-check-input", id: dom_id(recipe, :public), onchange: "this.form.submit()" %>
-          </div>
+          <%= form.check_box :public, class: "form-check-input", id: dom_id(recipe, :public), onchange: "this.form.submit()" %>
         <% end %>
+
       </div>
-    <% end %>
+
+  <% end %>
   </div>
 
   <p>

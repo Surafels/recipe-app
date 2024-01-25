@@ -46,16 +46,6 @@
     </tbody>
   </table>
 
-  <!-- Public/Private switch -->
-  <div class="form-check">
-    <%= form_for @recipe, url: recipe_path(@recipe), method: :patch, remote: true do |form| %>
-      <%= form.check_box :public, { class: "form-check-input", onchange: "this.form.submit()" } %>
-      <%= form.label :public, class: "form-check-label", style: "margin-left: 5px;" do %>
-        <%= "Public" %>
-      <% end %>
-    <% end %>
-  </div>
-
   <div>
     <%= link_to 'Back to Recipes', recipes_path, class: 'btn btn-secondary' %>
   </div>
