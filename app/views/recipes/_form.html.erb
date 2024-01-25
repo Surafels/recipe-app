@@ -10,7 +10,7 @@
       </ul>
     </div>
   <% end %>
- <div class="mb-3">
+  <div class="mb-3">
     <%= form.label :name, style: "display: block",class: "fw-bold form-label" %>
     <%= form.text_field :name, class: "form-control", placeholder: "Recipe Name" %>
   </div>
@@ -30,13 +30,32 @@
     <%= form.text_area :description, class: "form-control", placeholder: "Description" %>
   </div>
 
-  <div class="mb-3">
-  <%= form.label :public, class: "fw-bold form-label me-3" %>
-  <%= form.check_box :public, class: "form-check-input" %>
+    <!-- Your existing form code here -->
+  <div id="recipe_steps" class="mb-3">
+    <!-- Add a new input field for the new step description -->
+    <textarea type="text" id="new_step_description" placeholder="New Step Description"></textarea>
+    <%= link_to 'Add Step', '#', class: 'add-step btn btn-primary btn-sm' %>
+
+    <!-- Container to hold the dynamically added steps -->
+    <div id="steps_container"></div>
   </div>
 
 
   <div>
     <%= form.submit class: 'btn btn-primary' %>
   </div>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          const addStepButton = document.querySelector(".add-step");
+          const stepsContainer = document.getElementById("steps_container");
+
+          addStepButton.addEventListener("click", function(event) {
+              event.preventDefault();
+              const newStepDescription = document.getElementById("new_step_description").value;
+              stepsContainer.insertAdjacentHTML("beforeend", `<div class="step">${newStepDescription}</div>`);
+          });
+      });
+  </script>
+
 <% end %>

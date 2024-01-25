@@ -1,9 +1,30 @@
 <div id="<%= dom_id recipe %>">
-  <p>
-    <strong>Name:</strong>
-    <%= recipe.name %>
-  </p>
+  <div class="d-flex justify-content-center">
+    <h1>
+      <%= recipe.name %>
+    </h1>
+  </div>
 
+  <div class="toggle_public">
+    <% if user_signed_in? && current_user.id == recipe.user_id %>
+      <%#= button_to 'Toggle Public', toggle_public_recipe_path(recipe.id), method: :patch, class: 'btn btn-primary' %>
+      <div class="d-flex justify-content-end form-check form-switch">
+        <label class="form-check-label mx-5" for="flexSwitchCheckDefault">Public</label>
+        <div class="mx-2"> <!-- Add margin between label and switch -->
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+        </div>
+      </div>
+
+  <% end %>
+  </div>
+
+<!--  <div id="recipe_steps_list">-->
+    <%# recipe.steps.each do |step| %>
+<!--      <div class="step"><%#= step %></div>-->
+    <%# end %>
+<!--  </div>-->
+
+<div>
   <p>
     <strong>Preparation time:</strong>
     <%= recipe.preparation_time %>
@@ -20,13 +41,10 @@
   </p>
 
   <p>
-    <strong>Public:</strong>
-    <%= recipe.public %>
-  </p>
-
-  <p>
     <strong>User:</strong>
     <%= recipe.user_id %>
   </p>
+</div>
+
 
 </div>

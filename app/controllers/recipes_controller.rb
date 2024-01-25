@@ -9,7 +9,7 @@ class RecipesController < ApplicationController
 
   # GET /recipes/1 or /recipes/1.json
   def show
-    @recipes = Recipes.find(params[:id])
+    @recipes = Recipe.find(params[:id])
   end
 
   # GET /recipes/new
@@ -22,10 +22,20 @@ class RecipesController < ApplicationController
   def edit; end
 
   def create
-    @recipes = current_user.recipes.build(recipe_params)
+    @recipe = Recipe.new(recipe_params)
 
-    if @recipes.save
-      redirect_to recipes_path, notice: 'Food was successfully created.'
+    # Extract steps from the steps_container
+    steps = params[:recipe][:steps_attributes]
+
+    # Process steps and add them to the recipe
+    if steps
+      steps.each do |index, step_attributes|
+        @recipe.steps.build(description: step_attributes[:description])
+      end
+    end
+
+    if @recipe.save
+      redirect_to @recipe, notice: 'Recipe was successfully created.'
     else
       render :new
     end
@@ -54,6 +64,15 @@ class RecipesController < ApplicationController
     end
   end
 
+  def add_step
+    @step = Step.new(step_params)
+    if @step.save
+      render json: { status: 'success' }
+    else
+      render json: { status: 'error', errors: @step.errors.full_messages }
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -61,8 +80,15 @@ class RecipesController < ApplicationController
     @recipe = Recipe.find(params[:id])
   end
 
+  def step_params
+    params.require(:step).permit(:description, :recipe_id)
+  end
+
   # Only allow a list of trusted parameters through.
   def recipe_params
-    params.require(:recipe).permit(:name, :preparation_time, :cooking_time, :description, :public, :user_id)
+    params.require(:recipe).permit(
+      :name, :preparation_time, :cooking_time, :description, :public,
+      steps_attributes: [:description, :_destroy]
+    )
   end
 end
