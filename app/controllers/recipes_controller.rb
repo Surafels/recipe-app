@@ -8,9 +8,9 @@ class RecipesController < ApplicationController
 
   # GET /recipes/1 or /recipes/1.json
   def show
-  @recipe = Recipe.find(params[:id])
-  authorize! :read, @recipe
-end
+    @recipe = Recipe.find(params[:id])
+    authorize! :read, @recipe
+  end
 
   # GET /recipes/new
   def new
@@ -18,7 +18,6 @@ end
     @recipe.steps.build # Build an empty step for the form
     @user = current_user
   end
-
 
   # GET /recipes/1/edit
   def edit; end
@@ -71,8 +70,8 @@ end
       # Create a temporary ingredient hash and store it in the session
       temp_ingredient = {
         food_name: @food.name,
-        quantity: quantity,
-        value: value
+        quantity:,
+        value:
       }
 
       session[:temp_ingredient] ||= []
@@ -85,7 +84,6 @@ end
       render :add_ingredient
     end
   end
-
 
   def remove_temp_ingredient
     index = params[:index].to_i
@@ -105,7 +103,7 @@ end
   def recipe_params
     params.require(:recipe).permit(
       :name, :preparation_time, :cooking_time, :description, :public, :user_id,
-      recipe_foods_attributes: [:id, :food, :quantity, :value, :_destroy]
+      recipe_foods_attributes: %i[id food quantity value _destroy]
     )
   end
 

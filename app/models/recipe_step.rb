@@ -3,4 +3,3 @@ class RecipeStep < ApplicationRecord
 
   validates :description, presence: true
 end
-

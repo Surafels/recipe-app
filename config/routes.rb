@@ -14,11 +14,11 @@ Rails.application.routes.draw do
   end
   
   authenticated :user do
-    root 'foods#index', as: :authenticated_root
+    root 'public_recipes#index', as: :authenticated_root
   end
 
   unauthenticated :user do
-    root 'home#index', as: :unauthenticated_root
+    root 'public_recipes#index', as: :unauthenticated_root
   end
 
   delete 'recipes/remove_temp_ingredient', to: 'recipes#remove_temp_ingredient'
