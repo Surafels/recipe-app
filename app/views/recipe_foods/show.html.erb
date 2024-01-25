@@ -1,4 +1,6 @@
-<p style="color: green"><%= notice %></p>
+<%
+=begin%>
+ <p style="color: green"><%= notice %></p>
 
 <%= render @recipe_food %>
 
@@ -7,4 +9,6 @@
   <%= link_to "Back to recipe foods", recipe_foods_path %>
 
   <%= button_to "Destroy this recipe food", @recipe_food, method: :delete %>
-</div>
+</div> 
+<%
+=end%>
