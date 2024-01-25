@@ -19,13 +19,13 @@ class RecipeFoodsController < ApplicationController
 
   def create
     @recipe = Recipe.find(params[:recipe_id])
-    @recipe_food = RecipeFood.new(recipe_food_params)
+    @recipe_food = @recipe.recipe_foods.new(recipe_food_params)
 
     if @recipe_food.save
-      redirect_to recipes_path, notice: 'Ingredient was successfully added.'
+      redirect_to recipe_path(@recipe), notice: 'Ingredient was successfully added.'
     else
       @foods = Food.all
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -50,7 +50,7 @@ class RecipeFoodsController < ApplicationController
     @recipe_food.destroy!
 
     respond_to do |format|
-      format.html { redirect_to recipe_foods_url, notice: 'Recipe food was successfully destroyed.' }
+      format.html { redirect_to recipe_path(@recipe), notice: 'Recipe food was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -62,7 +62,17 @@ class RecipeFoodsController < ApplicationController
     @recipe = Recipe.find(params[:recipe_id])
   end
 
+  def set_recipe_food
+    @recipe_food = RecipeFood.find(params[:id])
+  end
+  def set_recipe_food
+    @recipe_food = RecipeFood.find(params[:id])
+  end
+  # def set_recipe_food
+  #   @recipe_food = @recipe.recipe_foods.find(params[:id])
+  # end
+
   def recipe_food_params
-    params.require(:recipe_food).permit(:food, :quantity, :value)
+    params.require(:recipe_food).permit(:food_id, :quantity)
   end
 end

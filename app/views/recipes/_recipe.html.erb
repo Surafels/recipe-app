@@ -1,3 +1,4 @@
+
 <div id="<%= dom_id recipe %>">
   <div class="d-flex justify-content-center">
     <h1>
@@ -7,14 +8,14 @@
 
   <div class="toggle_public">
     <% if user_signed_in? && current_user.id == recipe.user_id %>
-      <%#= button_to 'Toggle Public', toggle_public_recipe_path(recipe.id), method: :patch, class: 'btn btn-primary' %>
       <div class="d-flex justify-content-end form-check form-switch">
-        <label class="form-check-label mx-5" for="flexSwitchCheckDefault">Public</label>
-        <div class="mx-2"> <!-- Add margin between label and switch -->
-          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-        </div>
+        <%= form_for recipe, url: toggle_public_recipe_path(recipe.id), method: :patch do |form| %>
+          <label class="form-check-label mx-5" for="<%= dom_id(recipe, :public) %>">Public</label>
+          <div class="mx-2"> <!-- Add margin between label and switch -->
+            <%= form.check_box :public, class: "form-check-input", id: dom_id(recipe, :public), onchange: "this.form.submit()" %>
+          </div>
+        <% end %>
       </div>
-
     <% end %>
   </div>
 

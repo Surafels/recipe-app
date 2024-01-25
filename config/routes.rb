@@ -5,12 +5,8 @@ Rails.application.routes.draw do
   get 'users/:id', to: 'users#show', as: :user_show, constraints: { id: /\d+/ }
   resources :recipes do
     resources :recipe_foods
-    member do
-      get 'add_ingredient'
-      post 'save_ingredient'
-    end
+    patch 'toggle_public', on: :member
   end
-  delete 'recipes/remove_temp_ingredient', to: 'recipes#remove_temp_ingredient'
 
   resources :foods
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
