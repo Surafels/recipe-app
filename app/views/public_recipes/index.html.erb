@@ -1,18 +1,18 @@
 <p style="color: green"><%= notice %></p>
 
-<div class="row">
+<% @public_recipes.each do |recipe| %>
+  <div class="row">
     <div class="card d-flex flex-row">
       <div class="row col-6">
         <h2>
-          Title<%= %>
+          <%= recipe.name %>
         </h2>
-        <span>By: Noel</span>
-
+        <span>By: <%= recipe.user.name %></span>
       </div>
       <div class="d-flex flex-column">
-        <p>Total food items </p>
-        <p>Total price </p>
+        <p>Total food items: <%= recipe.recipe_foods.count %></p>
+        <p>Total price: <%= calculate_total_price(recipe) %></p>
       </div>
-
     </div>
-</div>
+  </div>
+<% end %>
