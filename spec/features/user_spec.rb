@@ -60,7 +60,6 @@ RSpec.describe 'User', type: :feature do
       expect(page).to have_content('Log in')
       expect(page).to have_content('Email')
       expect(page).to have_content('Password')
-      end
-      end
     end
-
+  end
+end
