@@ -40,7 +40,6 @@ class RecipeFoodsController < ApplicationController
     end
   end
 
-
   private
 
   def set_recipe_food
