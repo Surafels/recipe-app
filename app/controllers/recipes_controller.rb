@@ -11,9 +11,6 @@ class RecipesController < ApplicationController
     @recipe = Recipe.find(params[:id])
     authorize! :read, @recipe
   end
-    @recipe = Recipe.find(params[:id])
-    authorize! :read, @recipe
-  end
 
   # GET /recipes/new
   def new
@@ -61,43 +58,6 @@ class RecipesController < ApplicationController
     @food = Food.new
     @foods = Food.all
   end
-
-  def save_ingredient
-    @recipe = Recipe.find(params[:id])
-    @food = Food.find(params[:food_id])
-    quantity = params[:quantity].to_i
-
-    if @food && quantity.positive?
-      # Calculate the value based on the unit price and quantity
-      value = @food.price * quantity
-
-      # Create a temporary ingredient hash and store it in the session
-      temp_ingredient = {
-        food_name: @food.name,
-        quantity:,
-        value:
-        quantity:,
-        value:
-      }
-
-      session[:temp_ingredient] ||= []
-      session[:temp_ingredient] << temp_ingredient
-
-      flash[:notice] = 'Ingredient was successfully added.'
-      redirect_to add_ingredient_recipe_path(@recipe)
-    else
-      flash[:alert] = 'Invalid food or quantity.'
-      render :add_ingredient
-    end
-  end
-
-  #
-  # def remove_temp_ingredient
-  #   index = params[:index].to_i
-  #   session[:temp_ingredient].delete_at(index) if index >= 0
-  #
-  #   redirect_to recipe_path(@recipe), notice: 'Ingredient was successfully removed.'
-  # end
 
   def toggle_public
     @recipe = Recipe.find(params[:id])
