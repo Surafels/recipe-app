@@ -19,13 +19,14 @@
   </div>
 
   <p>
-    <strong>Preparation time:</strong>
-    <%= recipe.preparation_time %>
+  <strong>Preparation Time:</strong>
+
+    <%= recipe.preparation_time %> <%= "hour".pluralize(@recipe.preparation_time) %>
   </p>
 
   <p>
     <strong>Cooking time:</strong>
-    <%= recipe.cooking_time %>
+    <%= recipe.cooking_time %> <%= "hour".pluralize(@recipe.cooking_time) %>
   </p>
 
   <h2>Steps:</h2>

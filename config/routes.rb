@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   delete 'recipes/remove_temp_ingredient', to: 'recipes#remove_temp_ingredient'
   resources :foods
 
+  get 'shopping_list' => 'shopping_lists#index', as: :shopping_list
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "public_recipes#index"
