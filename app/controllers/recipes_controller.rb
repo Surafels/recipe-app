@@ -11,6 +11,9 @@ class RecipesController < ApplicationController
     @recipe = Recipe.find(params[:id])
     authorize! :read, @recipe
   end
+    @recipe = Recipe.find(params[:id])
+    authorize! :read, @recipe
+  end
 
   # GET /recipes/new
   def new
@@ -73,6 +76,8 @@ class RecipesController < ApplicationController
         food_name: @food.name,
         quantity:,
         value:
+        quantity:,
+        value:
       }
 
       session[:temp_ingredient] ||= []
@@ -86,11 +91,21 @@ class RecipesController < ApplicationController
     end
   end
 
-  def remove_temp_ingredient
-    index = params[:index].to_i
-    session[:temp_ingredient].delete_at(index) if index >= 0
+  #
+  # def remove_temp_ingredient
+  #   index = params[:index].to_i
+  #   session[:temp_ingredient].delete_at(index) if index >= 0
+  #
+  #   redirect_to recipe_path(@recipe), notice: 'Ingredient was successfully removed.'
+  # end
 
-    redirect_to recipe_path(@recipe), notice: 'Ingredient was successfully removed.'
+  def toggle_public
+    @recipe = Recipe.find(params[:id])
+    @recipe.toggle!(:public)
+    respond_to do |format|
+      format.html { redirect_to @recipe, notice: 'Recipe was successfully updated.' }
+      format.json { render :show, status: :ok, location: @recipe }
+    end
   end
 
   private
@@ -102,10 +117,8 @@ class RecipesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def recipe_params
-    params.require(:recipe).permit(
-      :name, :preparation_time, :cooking_time, :description, :public, :user_id,
-      recipe_foods_attributes: %i[id food quantity value _destroy]
-    )
+    params.require(:recipe).permit(:name, :preparation_time, :cooking_time, :description, :public, :user_id,
+                                   recipe_foods_attributes: %i[id food_id quantity value _destroy])
   end
 
   def food_params

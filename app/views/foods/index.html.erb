@@ -11,7 +11,6 @@
     <th scope="col">Name</th>
     <th scope="col">Measurement Unit</th>
     <th scope="col">Price</th>
-    <th scope="col">Quantity</th>
     <th scope="col">Actions</th>
   </tr>
   </thead>
@@ -22,7 +21,6 @@
       <td><%= food.name %></td>
       <td><%= food.measurment_unit %></td>
       <td><%= food.price %></td>
-      <td><%= food.quantity %></td>
       <td>
         <%= button_to "Delete", food, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm" %>
       </td>

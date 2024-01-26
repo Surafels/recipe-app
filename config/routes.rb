@@ -7,10 +7,7 @@ Rails.application.routes.draw do
   resources :recipes do
     resources :recipe_foods, only: [:new, :create, :edit, :update, :destroy]
 
-    member do
-      get 'add_ingredient'
-      post 'save_ingredient'
-    end
+    patch 'toggle_public', on: :member
   end
   
   authenticated :user do
@@ -21,7 +18,6 @@ Rails.application.routes.draw do
     root 'public_recipes#index', as: :unauthenticated_root
   end
 
-  delete 'recipes/remove_temp_ingredient', to: 'recipes#remove_temp_ingredient'
   resources :foods
 
   get 'shopping_list' => 'shopping_lists#index', as: :shopping_list
