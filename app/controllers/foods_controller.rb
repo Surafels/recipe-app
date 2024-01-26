@@ -2,13 +2,9 @@ class FoodsController < ApplicationController
   before_action :set_food, only: %i[show edit update destroy]
 
   # GET /foods or /foods.json
-  def index
-    @foods = if user_signed_in?
-               current_user.foods
-             else
-               []
-             end
-  end
+    def index
+      @foods = Food.all
+    end
 
   # GET /foods/1 or /foods/1.json
   def show; end
@@ -54,7 +50,12 @@ class FoodsController < ApplicationController
 
   # DELETE /foods/1 or /foods/1.json
   def destroy
-    @food.destroy!
+    @food = Food.find(params[:id])
+
+    # Handle dependent records in recipe_foods
+    RecipeFood.where(food: @food).destroy_all
+
+    @food.destroy
 
     respond_to do |format|
       format.html { redirect_to foods_url, notice: 'Food was successfully deleted.' }

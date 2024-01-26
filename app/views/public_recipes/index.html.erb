@@ -1,6 +1,6 @@
 <p style="color: green"><%= notice %></p>
 
-<% @public_recipes.each do |recipe| %>
+<% @public_recipes.includes(:user, :recipe_foods).each do |recipe| %>
   <div class="row">
     <div class="card d-flex flex-row">
       <div class="row col-6">
@@ -10,7 +10,7 @@
         <span>By: <%= recipe.user.name %></span>
       </div>
       <div class="d-flex flex-column">
-        <p>Total food items: <%= recipe.recipe_foods.count %></p>
+        <p>Total food items: <%= recipe.recipe_foods_count %></p>
         <p>Total price: <%= calculate_total_price(recipe) %></p>
       </div>
     </div>
