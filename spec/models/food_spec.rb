@@ -43,6 +43,6 @@ RSpec.describe Food, type: :model do
     it 'is not valid with a negative quantity' do
       food = Food.new(quantity: -1)
       expect(food).to_not be_valid
-      end
     end
+  end
 end
