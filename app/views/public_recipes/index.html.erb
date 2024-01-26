@@ -5,7 +5,7 @@
     <div class="card d-flex flex-row">
       <div class="row col-6">
         <h2>
-          <%= recipe.name %>
+          <%= link_to recipe.name, recipe_path(recipe) %>
         </h2>
         <span>By: <%= recipe.user.name %></span>
       </div>
