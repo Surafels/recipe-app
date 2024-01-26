@@ -12,6 +12,8 @@ gem 'rspec-rails'
 
 gem 'devise'
 
+gem 'bullet'
+
 # add cancancan for authorization
 gem 'cancancan'
 
