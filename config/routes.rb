@@ -1,17 +1,30 @@
 Rails.application.routes.draw do
   get 'public_recipes/index'
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations' }
   resources :users, except: :show
   get 'users/:id', to: 'users#show', as: :user_show, constraints: { id: /\d+/ }
-  resources :recipe_foods
-  resources :recipes
-  resources :foods
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  
+  resources :recipes do
+    resources :recipe_foods, only: [:new, :create, :edit, :update, :destroy]
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+    member do
+      get 'add_ingredient'
+      post 'save_ingredient'
+    end
+  end
+  
+  authenticated :user do
+    root 'public_recipes#index', as: :authenticated_root
+  end
+
+  unauthenticated :user do
+    root 'public_recipes#index', as: :unauthenticated_root
+  end
+
+  delete 'recipes/remove_temp_ingredient', to: 'recipes#remove_temp_ingredient'
+  resources :foods
+
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
   root "public_recipes#index"
 end

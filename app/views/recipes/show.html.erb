@@ -3,8 +3,39 @@
 <%= render @recipe %>
 
 <div>
-  <%= link_to "Edit this recipe", edit_recipe_path(@recipe) %> |
-  <%= link_to "Back to recipes", recipes_path %>
+  <div class="d-flex justify-content-between">
+    <%= link_to "Generate shopping list", edit_recipe_path(@recipe), class: 'btn btn-primary float-end mb-5' %>
+    <%= link_to "Add ingredients", new_recipe_recipe_food_path(@recipe), class: 'btn btn-primary float-end mb-5' %>
+  </div>
 
-  <%= button_to "Destroy this recipe", @recipe, method: :delete %>
+  <h3>Ingredients</h3>
+  <%= form_with(model: @recipe, local: true) do |form| %>
+    <table class="table container rounded">
+      <thead>
+        <tr>
+          <th scope="col">Food</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Value</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recipe.recipe_foods.each do |recipeFood| %>
+          <tr>
+            <td><%= recipeFood.food.name %></td>
+            <td><%= recipeFood.quantity %> </td>
+            <td>$ <%= recipeFood.quantity * recipeFood.food.price %> </td>
+            <td class="text-center">
+              <%= button_to 'Remove', recipe_recipe_food_path(@recipe, recipeFood), method: :delete, data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, class: 'btn btn-danger float-start btn-sm' %>
+              <%= link_to 'Modify', edit_recipe_recipe_food_path(@recipe, recipeFood), class: 'btn btn-info btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <div>
+    <%= link_to 'Back to Recipes', recipes_path, class: 'btn btn-secondary' %>
+  </div>
 </div>
