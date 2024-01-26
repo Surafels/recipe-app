@@ -3,7 +3,7 @@ class FoodsController < ApplicationController
 
   # GET /foods or /foods.json
   def index
-    @foods = Food.all
+    @foods = current_user.foods
   end
 
   # GET /foods/1 or /foods/1.json
@@ -50,16 +50,18 @@ class FoodsController < ApplicationController
 
   # DELETE /foods/1 or /foods/1.json
   def destroy
-    @food = Food.find(params[:id])
-
-    # Handle dependent records in recipe_foods
-    RecipeFood.where(food: @food).destroy_all
-
-    @food.destroy
-
-    respond_to do |format|
-      format.html { redirect_to foods_url, notice: 'Food was successfully deleted.' }
-      format.json { head :no_content }
+    # Ensure that only the owner can delete the food
+    if @food.user == current_user
+      @food.destroy
+      respond_to do |format|
+        format.html { redirect_to foods_url, notice: 'Food was successfully deleted.' }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to foods_url, alert: 'You are not authorized to delete this food.' }
+        format.json { render json: { error: 'Unauthorized' }, status: :unauthorized }
+      end
     end
   end
 
