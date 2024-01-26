@@ -47,19 +47,16 @@ class RecipesController < ApplicationController
 
   # DELETE /recipes/1 or /recipes/1.json
   def destroy
-    # Ensure that only the owner can delete the recipe
+    @recipe = Recipe.find(params[:id])
+
+    # Check if the current user is the owner of the recipe
     if @recipe.user == current_user
       @recipe.recipe_foods.destroy_all
       @recipe.destroy
-      respond_to do |format|
-        format.html { redirect_to recipes_url, notice: 'Recipe was successfully deleted.' }
-        format.json { head :no_content }
-      end
+      redirect_to recipes_path, notice: 'Recipe eliminated successfully.'
     else
-      respond_to do |format|
-        format.html { redirect_to recipes_url, alert: 'You are not authorized to delete this recipe.' }
-        format.json { render json: { error: 'Unauthorized' }, status: :unauthorized }
-      end
+      # If the current user is not the owner, handle unauthorized access
+      redirect_to recipes_path, alert: 'You are not authorized to delete this recipe.'
     end
   end
 
