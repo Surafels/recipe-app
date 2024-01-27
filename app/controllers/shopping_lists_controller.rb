@@ -1,36 +1,27 @@
 class ShoppingListsController < ApplicationController
   def index
-    load_user_foods
-    update_foods_quantity
-    calculate_total_price
-  end
-
-  private
-
-  def load_user_foods
-    # Get all the foods of the current user with eager loading
+    # Get all the foods of the current user
     @foods = current_user.foods
-  end
 
-  def update_foods_quantity
-    # Loop through each recipe and update the quantity of the foods
-    current_user.recipes.each do |recipe|
-      recipe.recipe_foods.each do |recipe_food|
-        update_food_quantity(recipe_food)
+    # For each recipe of the current user, update the quantity of the foods
+    current_user.recipes.map do |recipe|
+      recipe.recipe_foods.includes(:food).map do |recipe_food|
+        food = recipe_food.food
+        selected_food = @foods.select { |f| f.name == food.name }[0]
+        selected_food.quantity = selected_food.quantity - recipe_food.quantity
       end
     end
-  end
 
-  def update_food_quantity(recipe_food)
-    food = recipe_food.food
-    selected_food = @foods.find { |f| f.name == food.name }
+    # Select only the foods with negative quantity
+    @foods = @foods.select { |food| food.quantity.negative? }
 
-    # Update the quantity of the selected_food based on the recipe
-    selected_food.quantity -= recipe_food.quantity if selected_food
-  end
+    # Invert the quantity of the selected foods
+    @foods.each { |food| food.quantity *= -1 }
 
-  def calculate_total_price
-    # Calculate the total price of all foods, not just the selected ones
-    @total = @foods.sum { |food| food.price * food.quantity }
+    # Calculate the total price of the selected foods
+    @total = 0
+    @foods.each do |food|
+      @total += (food.price * food.quantity)
+    end
   end
 end
