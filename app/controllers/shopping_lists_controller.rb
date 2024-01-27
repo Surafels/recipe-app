@@ -9,7 +9,7 @@ class ShoppingListsController < ApplicationController
 
   def load_user_foods
     # Get all the foods of the current user with eager loading
-    @foods = current_user.foods.includes(:recipes, :recipe_foods)
+    @foods = current_user.foods
   end
 
   def update_foods_quantity
@@ -30,13 +30,7 @@ class ShoppingListsController < ApplicationController
   end
 
   def calculate_total_price
-    # Select only the foods with negative quantity
-    @selected_foods = @foods.select { |food| food.quantity.negative? }
-
-    # Invert the quantity of the selected foods
-    @selected_foods.each { |food| food.quantity *= -1 }
-
-    # Calculate the total price of the selected foods
-    @total = @selected_foods.sum { |food| food.price * food.quantity }
+    # Calculate the total price of all foods, not just the selected ones
+    @total = @foods.sum { |food| food.price * food.quantity }
   end
 end
