@@ -1,0 +1,30 @@
+<p style="color: green"><%= notice %></p>
+
+<div class="d-flex justify-content-end mb-4">
+  <%= link_to "Add food", new_food_path, class: "btn btn-success" %>
+</div>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col" class="d-none">ID</th>
+    <th scope="col">Name</th>
+    <th scope="col">Measurement Unit</th>
+    <th scope="col">Price</th>
+    <th scope="col">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @foods.each do |food| %>
+    <tr>
+      <th scope="row" class="d-none"><%= food.id %></th>
+      <td><%= food.name %></td>
+      <td><%= food.measurment_unit %></td>
+      <td><%= food.price %></td>
+      <td>
+        <%= button_to "Delete", food, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm" %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

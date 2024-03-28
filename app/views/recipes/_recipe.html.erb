@@ -1,0 +1,39 @@
+
+<div id="<%= dom_id recipe %>">
+  <div class="d-flex justify-content-center">
+    <h1>
+      <%= recipe.name %>
+    </h1>
+  </div>
+
+  <div class="toggle_public">
+    <% if user_signed_in? && current_user.id == recipe.user_id %>
+      <div class="d-flex justify-content-end form-check form-switch" style="display: flex;">
+        <%= form_for recipe, url: toggle_public_recipe_path(recipe.id), method: :patch, html: { class: 'd-flex flex-row align-items-center' } do |form| %>
+          <label class="form-check-label mx-5" for="<%= dom_id(recipe, :public) %>">Public</label>
+          <%= form.check_box :public, class: "form-check-input", id: dom_id(recipe, :public), onchange: "this.form.submit()" %>
+        <% end %>
+
+      </div>
+
+  <% end %>
+  </div>
+
+  <p>
+  <strong>Preparation Time:</strong>
+
+    <%= recipe.preparation_time %> <%= "hour".pluralize(@recipe.preparation_time) %>
+  </p>
+
+  <p>
+    <strong>Cooking time:</strong>
+    <%= recipe.cooking_time %> <%= "hour".pluralize(@recipe.cooking_time) %>
+  </p>
+
+  <h2>Steps:</h2>
+  <% @recipe.steps.each do |step| %>
+    <p><%= step.description %></p>
+  <% end %>
+
+
+</div>

@@ -1,0 +1,64 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @recipe %>
+
+<div>
+  <div class="d-flex justify-content-between">
+  
+      <%= link_to 'Generate Shopping List', shopping_list_path , class: 'btn btn-primary float-end mb-5' %>
+ 
+    <%= link_to "Add ingredients", new_recipe_recipe_food_path(@recipe), class: 'btn btn-primary float-end mb-5' %>
+  </div>
+
+  <h3>Ingredients</h3>
+
+  <table class="table container rounded">
+    <thead>
+    <tr>
+      <th scope="col">Food</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Value</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <!-- Hidden row for the first empty ingredient -->
+    <tr id="emptyRow" style="display: none;">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+    <% @recipe.recipe_foods.each_with_index do |recipeFood, index| %>
+      <tr>
+        <td><%= recipeFood.food.name %></td>
+        <td><%= recipeFood.quantity %><%= recipeFood.food.measurment_unit  %></td>
+        <td>$<%= recipeFood.quantity * recipeFood.food.price %></td>
+        <td class="d-flex gap-3 justify-content-end">
+          <% if can? :destroy, @recipe %>
+            <%= button_to "Delete", recipe_recipe_food_path(@recipe, recipeFood), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
+            <%= link_to "Modify", edit_recipe_recipe_food_path(recipe_id: @recipe.id, id: recipeFood.id), class:"btn btn-dark" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+
+    </tbody>
+  </table>
+
+  <div>
+    <%= link_to 'Back to Recipes', recipes_path, class: 'btn btn-secondary' %>
+  </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Add ingredient button click event
+        document.getElementById("addIngredientBtn").addEventListener("click", function() {
+            // Show the hidden row (first empty ingredient)
+            document.getElementById("emptyRow").style.display = "table-row";
+        });
+    });
+</script>

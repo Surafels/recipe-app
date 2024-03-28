@@ -1,0 +1,54 @@
+<%= form_with(model: recipe, class: 'my-4') do |form| %>
+  <% if recipe.errors.any? %>
+    <div class="alert alert-danger">
+      <h2><%= pluralize(recipe.errors.count, "error") %> prohibited this recipe from being saved:</h2>
+
+      <ul>
+        <% recipe.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, style: "display: block", class: "fw-bold form-label" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Recipe Name" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :preparation_time, style: "display: block", class: "fw-bold form-label" %>
+    <%= form.text_field :preparation_time, class: "form-control", placeholder: "Preparation time" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :cooking_time, style: "display: block", class: "fw-bold form-label" %>
+    <%= form.text_field :cooking_time, class: "form-control", placeholder: "Cooking time" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, style: "display: block", class: "fw-bold form-label" %>
+    <%= form.text_area :description, class: "form-control", placeholder: "Description" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :public, class: "fw-bold form-label me-3" %>
+    <%= form.check_box :public, class: "form-check-input" %>
+  </div>
+
+  <!-- Nested form for steps -->
+  <div class="mb-3">
+    <%= form.fields_for :steps do |step_form| %>
+      <%= step_form.label :description, style: "display: block", class: "fw-bold form-label" %>
+      <%= step_form.text_area :description, class: "form-control", placeholder: "Enter step description" %>
+      <%= step_form.check_box :_destroy, class: "form-check-input" %>
+      <%= step_form.label :_destroy, class: "fw-bold form-check-label", style: "display: inline-block; margin-left: 5px" do %>
+        Remove Step
+      <% end %>
+    <% end %>
+  </div>
+  <div>
+    <%= form.submit class: 'btn btn-primary' %>
+  </div>
+
+<% end %>
